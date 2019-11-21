@@ -91,25 +91,8 @@ void token::transfer( name from, name to, asset quantity, string memo )
     check( quantity.symbol == st.supply.symbol, "Symbol precision mismatch" );
     check( memo.size() <= 256, "Memo has more than 256 bytes" );
 
-    auto payer = has_auth( to ) ? to : from;
-	
-	auto symCFF = BASIC_SYMBOL.code();
-	stats statstableCFF( get_self(), symCFF.raw() );
-	const auto& stCFF = statstableCFF.get( symCFF.raw() );
-	asset COMISS;
-	COMISS.symbol = BASIC_SYMBOL;
-	COMISS.amount = 10000;//1280;
-	if( (stCFF.max_supply.amount - COMISS.amount ) < 0 ){
-		check( false, "All CFF tokens burned!!!" );
-	}
-	statstableCFF.modify( stCFF, get_self(), [&]( auto& s ) {
-		s.supply.amount -= COMISS.amount;
-		s.max_supply.amount -= COMISS.amount;
-	});
-	sub_balance( from, COMISS );
-	
-	sub_balance( from, quantity );
-	add_balance( to, quantity, payer );
+    sub_balance( from, quantity );
+    add_balance( to, quantity, payer );
 }
 
 
