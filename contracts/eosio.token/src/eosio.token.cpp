@@ -1,5 +1,7 @@
 #include <eosio.token/eosio.token.hpp>
 
+#define BASIC_SYMBOL symbol("CFF", 4)
+
 namespace eosio {
 
 void token::create( const name&   issuer,
